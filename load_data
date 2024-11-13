@@ -5,7 +5,7 @@
 __author__ = ""
 
 # Update "" with your team (e.g. T102)
-__team__ = ""
+__team__ = "T-15"
 
 #==========================================#
 # Place your student_school_list function after this line
@@ -103,11 +103,73 @@ def student_health_list(filename: str, health: str) -> list:
 # Place your load_data function after this line
 
 def load_data(filename: str, filter):
-  
-  
+    """
+
+    Preconditions: filename exists
+    """
+    
+    if filter[0].lower() == 'school':
+        return student_school_list(filename,filter[1])
+    
+    #If the user wants to filter by health
+    elif filter[0].lower() == 'health':
+        return student_health_list(filename, filter[1])
+
+    # If the user wants to filter by age
+    elif filter[0].lower() == 'age':
+        return student_age_list(filename, filter[1])
+
+    # If the user wants to filter by failiures
+    elif filter[0].lower() == 'failiures':
+        return student_failures_list(filename,filter[1])
+
+    # If the user wants to print a list of all students and all attributes
+    elif filter[0].lower() == 'all':
+        
+        # Open the file for reading
+        file = open(filename, "r")
+        row = 0
+        column_headers = []
+        list_all_students = []
+
+        # Iterate over each line in the file
+        for line in file:
+
+            # Split and strip each line to separate fields
+            lines = line.replace("\n","").split(',')
+
+            # First row contains headers
+            if row == 0:
+                 column_headers = lines
+
+            else:
+                student = {}              
+                student[column_headers[0]] = lines[0]       # School (string)
+                student[column_headers[1]] = int(lines[1])  # Age (integer)
+                student[column_headers[2]] = int(lines[2])  # StudyTime (integer)
+                student[column_headers[3]] = int(lines[3])  # Failures (integer)
+                student[column_headers[4]] = int(lines[4])  # Health (integer)
+                student[column_headers[5]] = int(lines[5])  # Absences (integer)
+                student[column_headers[6]] = int(lines[6])  # G1 (integer)
+                student[column_headers[7]] = int(lines[7])  # G2 (integer)
+                student[column_headers[8]] = int(lines[8])  # G3 (integer)
+
+                # Add the student's dictionary to the list of students with the specified health score
+                list_all_students.append(student)
+            
+            row += 1
+          
+        # Close the file and return the list of matching students
+        file.close()
+
+        return list_all_students
+
+    # Invalid input
+    else:
+        print('Invalid filter') 
+        return []
+        
+print(load_data("student-mat.csv",('All',)))
 
 #==========================================#
 # Place your add_average function after this line
-
-
-# Do NOT include a main script in your submission
